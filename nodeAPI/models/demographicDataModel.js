@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt"); // for password hashing
 const schemaObj = mongoose.Schema;
 
-// connect to localmachine MongoDB and create/use a database with name: {vaccinedatahub}
-mongoose.connect(process.env.MONGO_URI);
+// // connect to localmachine MongoDB and create/use a database with name: {vaccinedatahub}
+// mongoose.connect(process.env.MONGO_URI);
 
 // NOTE: static regex expressions are declared between forward-slashes
 // /<REGEX EXPRESSION>/
@@ -37,7 +36,8 @@ const demographicSchema = new schemaObj(
       type: [String],
       default: [],
     },
-    ethnicity: { // similar to U.S. census categories
+    ethnicity: {
+      // similar to U.S. census categories
       type: [String],
       enum: [
         "American Indian or Alaska Native",
@@ -62,5 +62,10 @@ const demographicSchema = new schemaObj(
 );
 
 // Force MongoDB to use "demographicData" as the name
-const DemographicDataModel = mongoose.model("demographicData", demographicSchema, "demographicData");
+const DemographicDataModel = mongoose.model(
+  "demographicData",
+  demographicSchema,
+  "demographicData"
+);
+
 module.exports = DemographicDataModel;

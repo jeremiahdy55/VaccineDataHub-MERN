@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt"); // for password hashing
+const bcrypt = require("bcryptjs"); // for password hashing
 const schemaObj = mongoose.Schema;
 
-// connect to localmachine MongoDB and create/use a database with name: {vaccinedatahub}
-mongoose.connect(process.env.MONGO_URI);
+// // connect to localmachine MongoDB and create/use a database with name: {vaccinedatahub}
+// mongoose.connect(process.env.MONGO_URI);
 
 const userSchema = new schemaObj(
   {
