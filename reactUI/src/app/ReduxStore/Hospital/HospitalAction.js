@@ -4,40 +4,40 @@ import axios from "axios";
 export const setHospitals = (hospitals) => ({
   // this function expects that hospitals is an array of type: JS object
   type: ActionTypes.SET_HOSPITALS,
-  payload: hospitals,
+  payload: hospitals
 });
 
-export const fetchCart = (userId) => {
-  return function (dispatch) {
-    axios
-      .get(`http://localhost:9000/cart/api/${userId}`)
-      .then((response) => {
-        let cart = response.data;
-        if (cart) {
-          dispatch(
-            setHospitals(
-              cart.userId,
-              cart.items.map((p) => ({
-                productId: p.productId,
-                name: p.name,
-                desc: p.desc,
-                rating: p.rating,
-                price: p.price,
-                qty: p.qty,
-                category: p.category,
-              }))
-            )
-          );
-        } else {
-          // If no cart, clear redux-store of any cart data
-          dispatch(clearCart());
-        }
-      })
-      .catch((err) => {
-        console.log("Error While Fetching Cart", err);
-      });
-  };
-};
+// export const fetchCart = (userId) => {
+//   return function (dispatch) {
+//     axios
+//       .get(`http://localhost:9000/cart/api/${userId}`)
+//       .then((response) => {
+//         let cart = response.data;
+//         if (cart) {
+//           dispatch(
+//             setHospitals(
+//               cart.userId,
+//               cart.items.map((p) => ({
+//                 productId: p.productId,
+//                 name: p.name,
+//                 desc: p.desc,
+//                 rating: p.rating,
+//                 price: p.price,
+//                 qty: p.qty,
+//                 category: p.category,
+//               }))
+//             )
+//           );
+//         } else {
+//           // If no cart, clear redux-store of any cart data
+//           dispatch(clearCart());
+//         }
+//       })
+//       .catch((err) => {
+//         console.log("Error While Fetching Cart", err);
+//       });
+//   };
+// };
 
 // // Save single cart item, this is accessible from ProductItemComponent.js
 // export const saveCartItem = (userId, product) => {

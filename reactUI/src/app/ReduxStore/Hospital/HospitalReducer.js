@@ -6,11 +6,10 @@ const Initial_State = {
 
 const hospitalReducer = (state = Initial_State, action) => {
     switch (action.type) {
-      // update redux-stor cartReducer data
       case ActionTypes.SET_HOSPITALS:
         return {
           ...state,
-          hospitals: hospitals
+          hospitals: action.payload.hospitals
         };
   
       default:

@@ -5,9 +5,11 @@ const UserModel = require("../models/userModel");
 const DemographicDataModel = require("../models/demographicDataModel");
 const { generateToken, isAuthorized } = require("../jwtauth/JWTAuth");
 
-// Register the user (does not log them in)
+// Register the user and log them in
 userRouter.post("/register", async (req, res) => {
   const userObj = req.body;
+  console.log({userObj})
+
   const { username, name, password, address, email, phoneNo } = userObj; // get user data fields
   const { age, gender, profession, medicalHistory, ethnicity } = userObj; // get demographic data fields
   try {
@@ -31,7 +33,22 @@ userRouter.post("/register", async (req, res) => {
     await demographicData.save();
     user.demographicData = demographicData._id;
     await user.save();
-    res.status(201).json([user, demographicData]);
+
+    // Generate JWT token
+    const token = generateToken(user);
+    res.setHeader("x-access-token", token); // send it back in header
+    res.json({
+      user: {
+        _id: user._id,
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        address: user.address,
+        phoneNo: user.phoneNo,
+        demographicData: user.demographicData,
+        adminPrivilege: user.adminPrivilege,
+      },
+    });
   } catch (err) {
     console.error("Error during registration:", err);
     res.status(500).send("Error creating user");
@@ -68,8 +85,8 @@ userRouter.post("/login", async (req, res) => {
     const token = generateToken(user);
 
     // Send token and user info
+    res.setHeader("x-access-token", token); // send it back in header
     res.json({
-      token,
       user: {
         _id: user._id,
         username: user.username,
@@ -78,8 +95,8 @@ userRouter.post("/login", async (req, res) => {
         address: user.address,
         phoneNo: user.phoneNo,
         demographicData: user.demographicData,
-        adminPrivilege: user.adminPrivilege
-      }
+        adminPrivilege: user.adminPrivilege,
+      },
     });
   } catch (err) {
     console.error("Login error:", err);

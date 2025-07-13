@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
-import PageTitleBanner from "./PageTitleBanner";
+import { useSelector } from 'react-redux';
 
 const Home = () => {
+  const user = useSelector((state) => state.userReducer.user)
+  console.log({user})
   return (
     <>
-          <Navbar />
-          {/* <PageTitleBanner/> */}
       <h4> this will become the report home page with demographic breakdowns, watchlist, and data vis.</h4>
+      <h5>Username: {user.username}</h5>
     </>
   );
 };

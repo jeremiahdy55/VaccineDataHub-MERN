@@ -3,8 +3,7 @@ const vaccineRouter = express.Router({ strict: true, caseSensitive: true });
 const VaccineModel = require("../models/vaccineModel");
 const { isAuthorized } = require("../jwtauth/JWTAuth");
 
-// use authenticateToken as middleware to ensure user is authenticated
-vaccineRouter.get("/getVaccines", isAuthorized, async (req, res) => {
+vaccineRouter.get("/getVaccines", async (req, res) => {
   try {
     const vaccines = await VaccineModel.find().lean(); // return simple JSON object
     res.json(vaccines);
@@ -13,6 +12,7 @@ vaccineRouter.get("/getVaccines", isAuthorized, async (req, res) => {
   }
 });
 
+// use authenticateToken as middleware to ensure user is authenticated
 vaccineRouter.post("/registerVaccine", isAuthorized, async (req,res) => {
   const vaccineObj = req.body;
   try {

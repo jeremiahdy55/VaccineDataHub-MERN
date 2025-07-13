@@ -3,3 +3,5 @@
 // NOTE: string value is irrelevant, just make sure that each const is unique to the others
 
 export const SET_HOSPITALS = "SET_HOSPITALS";
+export const SET_USER_DATA = "SET_USER_DATA";
+export const LOGOUT_USER = "LOGOUT_USER";

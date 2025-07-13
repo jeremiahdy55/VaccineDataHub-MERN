@@ -26,11 +26,14 @@ module.exports = {
     extensions: [".js", ".jsx"]
   },
   plugins: [
-    new HtmlWebpackPlugin({template: "./src/index.html"})
+    new HtmlWebpackPlugin({
+      template: "./src/public/index.html",
+      favicon: './src/public/favicon.ico'
+    })
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, "src")
+      directory: path.join(__dirname, "public")
     },
     compress: true,
     port: 9090,
