@@ -129,7 +129,7 @@ function getRandomDateWithin6Months() {
           userId: user._id,
           hospitalId: hospital._id,
           vaccineId: vaccine._id,
-          approved: isPast,
+          approved: true,
           paid: isPast,
         });
       }
