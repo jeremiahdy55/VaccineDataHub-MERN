@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 const schemaObj = mongoose.Schema;
 
-// // connect to localmachine MongoDB and create/use a database with name: {vaccinedatahub}
-// mongoose.connect(process.env.MONGO_URI);
-
 const appointmentSchema = new schemaObj(
   {
     appointmentDate: { type: Date, required: true },

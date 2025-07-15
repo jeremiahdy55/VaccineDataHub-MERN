@@ -7,40 +7,61 @@ const VaccineModel = require("../models/vaccineModel");
 const UserModel = require("../models/userModel");
 const { isAuthorized } = require("../jwtauth/JWTAuth");
 
-// create appointment
-// approve appointment
 appointmentRouter.get(
   "/getPendingAppointments",
   isAuthorized,
   async (req, res) => {
     try {
-      const pendingAppointments = await AppointmentModel.find({
+      // Check that the user exists and has admin privileges in DB
+      const user = await UserModel.findById(req.user.id).lean();
+      if (!user)
+        return res.status(404).json({ error: "Invalid userId, not found" });
+      if (!user.adminPrivilege)
+        return res
+          .status(403)
+          .json({ error: "User does not have administrative privileges" });
+
+      // Get the pending appointments and populate it with the respective data
+      const pendingAppointmentsRaw = await AppointmentModel.find({
         approved: false,
-      }).lean(); // return simple JSON object
-      return res.status(200).json(pendingAppointments);
+      })
+        .populate("userId", "-password")
+        .lean(); // return simple JSON object
+
+      // Rename the populated fields
+      const pendingAppointments = pendingAppointmentsRaw.map((appt) => {
+        const { userId, hospitalId, vaccineId, ...rest } = appt;
+        return {
+          ...rest,
+          user: userId
+        };
+      });
+      return res.status(200).json({ appointments: pendingAppointments });
     } catch (err) {
-      res.status(500).send("Error retrieving pending appointments");
-    }
+      return res.status(500).json({ error: "Error retrieving pending appointments" });
+    };
   }
 );
 
-appointmentRouter.get(
-  "/getUnpaidAppointments/:userId",
-  isAuthorized,
-  async (req, res) => {
-    const filter = { approved: true, paid: false, userId: req.params.userId };
-    try {
-      const unpaidAppointments = await AppointmentModel.find(filter).lean(); // return simple JSON object
-      return res.status(200).json(unpaidAppointments);
-    } catch (err) {
-      res
-        .status(500)
-        .send(
-          "Error retrieving unpaid appointments for user with _id:" + req.params.userId
-        );
-    }
+appointmentRouter.get("/getAppointments", isAuthorized, async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.id).lean();
+    if (!user)
+      return res.status(404).json({ error: "Invalid userId, not found" });
+    const appointmentsForUser = await AppointmentModel.find({
+      userId: req.user.id,
+    }).lean(); // return simple JSON object
+    return res.status(200).json({ appointments: appointmentsForUser });
+  } catch (err) {
+    res
+      .status(500)
+      .json({
+        error:
+          "Error retrieving unpaid appointments for user with _id:" +
+          req.user.id,
+      });
   }
-);
+});
 
 appointmentRouter.post(
   "/requestAppointment",
@@ -49,32 +70,30 @@ appointmentRouter.post(
     const appointmentData = req.body;
     try {
       // check if they are valid object id's
-      if (!mongoose.Types.ObjectId.isValid(appointmentData.userId)) {
-        return res.status(400).json({ error: "Invalid userId format" });
-      }
       if (!mongoose.Types.ObjectId.isValid(appointmentData.vaccineId)) {
         return res.status(400).json({ error: "Invalid vaccineId format" });
       }
       if (!mongoose.Types.ObjectId.isValid(appointmentData.hospitalId)) {
         return res.status(400).json({ error: "Invalid hospitalId format" });
       }
-      
+
       // Check that the vaccine, hospital, and user exists in DB
+      const user = await UserModel.findById(req.user.id).lean();
+      if (!user) {
+        return res.status(404).json({ error: "Invalid userId, not found" });
+      } else {
+        appointmentData.userId = req.user.id;
+      }
       const vaccine = await VaccineModel.findById(
         appointmentData.vaccineId
       ).lean();
       if (!vaccine)
         return res.status(404).json({ error: "Invalid vaccineId, not found" });
-
       const hospital = await HospitalModel.findById(
         appointmentData.hospitalId
       ).lean();
       if (!hospital)
         return res.status(404).json({ error: "Invalid hospitalId, not found" });
-
-      const user = await UserModel.findById(appointmentData.userId).lean();
-      if (!user)
-        return res.status(404).json({ error: "Invalid userId, not found" });
 
       // Check if the exact same appointment is trying to be made
       const existing = await AppointmentModel.findOne({
@@ -89,7 +108,11 @@ appointmentRouter.post(
       // Create the appointment and save it into MongoDB
       const appointment = new AppointmentModel(appointmentData);
       await appointment.save();
-      return res.status(201).json(appointment);
+      // return all the appointments for this user
+      const appointmentsForUser = await AppointmentModel.find({
+        userId: req.user.id,
+      }).lean(); // return simple JSON object
+      return res.status(200).json({ appointments: appointmentsForUser });
     } catch (err) {
       console.log(err);
       if (err.name === "ValidationError") {
@@ -99,25 +122,22 @@ appointmentRouter.post(
           details: err.errors,
         });
       }
-      return res.status(500).send("Error in saving appointment");
+      return res.status(500).json({ error: "Error in saving appointment" });
     }
   }
 );
 
-appointmentRouter.post(
-  "/approveAppointment/:userId/:appointmentId",
+appointmentRouter.put(
+  "/approveAppointment/:appointmentId",
   isAuthorized,
   async (req, res) => {
     try {
       // check if they are valid object id
-      if (!mongoose.Types.ObjectId.isValid(req.params.userId)) {
-        return res.status(400).json({ error: "Invalid userId format" });
-      }
       if (!mongoose.Types.ObjectId.isValid(req.params.appointmentId)) {
         return res.status(400).json({ error: "Invalid appointmentId format" });
       }
       // Check that the user exists and has admin privileges in DB
-      const user = await UserModel.findById(req.params.userId).lean();
+      const user = await UserModel.findById(req.user.id).lean();
       if (!user)
         return res.status(404).json({ error: "Invalid userId, not found" });
       if (!user.adminPrivilege)
@@ -132,20 +152,21 @@ appointmentRouter.post(
         { new: true }
       );
       if (!appointment)
-        return res
-          .status(404)
-          .json({
-            error: `Could not find appointment with id: ${req.params.appointmentId}`,
-          });
-      return res.status(200).json(appointment);
+        return res.status(404).json({
+          error: `Could not find appointment with id: ${req.params.appointmentId}`,
+        });
+      const pendingAppointments = await AppointmentModel.find({
+        approved: false,
+      }).lean(); // return simple JSON object
+      return res.status(200).json({ appointments: pendingAppointments });
     } catch (err) {
       console.log(err);
-      return res.status(500).send("Error in approving appointment");
+      return res.status(500).json({ error: "Error in approving appointment" });
     }
   }
 );
 
-appointmentRouter.post(
+appointmentRouter.put(
   "/payAppointment/:appointmentId",
   isAuthorized,
   async (req, res) => {
@@ -157,22 +178,33 @@ appointmentRouter.post(
       }
 
       // Try to update the appointment to be paid
-      const appointment = await AppointmentModel.findById(appointmentId);
+      const appointment = await AppointmentModel.findOne({
+        _id: appointmentId,
+        approved: true,
+      });
       if (!appointment)
+        return res.status(404).json({
+          error: `Could not find APPROVED appointment with id: ${appointmentId}`,
+        });
+      // only the appointment's owner-user can pay for the appointment
+      if (appointment.userId.toString() !== req.user.id) {
         return res
-          .status(404)
-          .json({
-            error: `Could not find appointment with id: ${appointmentId}`,
-          });
-      if (!appointment.approved)
-        return res.status(400).json({ error: "Cannot pay an appointment that is not approved" });
-      
-      appointment.paid = true;
-      await appointment.save();
-      return res.status(200).json(appointment);
+          .status(403)
+          .json({ error: "You are not authorized to pay this appointment" });
+      } else {
+        if (appointment.paid) {
+          return res.status(409).json({ error: "Appointment has already been paid" });
+        }
+        appointment.paid = true;
+        await appointment.save();
+      }
+      const appointmentsForUser = await AppointmentModel.find({
+        userId: appointment.userId,
+      }).lean(); // return simple JSON object
+      return res.status(200).json({ appointments: appointmentsForUser });
     } catch (err) {
       console.log(err);
-      return res.status(500).send("Error in paying appointment");
+      return res.status(500).json({ error: "Error in paying appointment" });
     }
   }
 );

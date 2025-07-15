@@ -1,5 +1,16 @@
 @charset "UTF-8";
 
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+  
+.content-wrap {
+    flex: 1; /* allows the main content to grow and push footer down */
+    padding-bottom: 1rem; /* optional space before footer */
+}
+
 .bg-success {
     background-color: #2eac4b !important;
     border-color: #2eac4b !important;
@@ -78,4 +89,43 @@
     font-size: 1.5rem;
     gap: 6rem;  /* between sections */
     margin-left: 2rem; /* space from left of screen */
+}
+
+footer {
+    /* position: fixed; // coment to prevent overlap on top of content */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #7dd69b;
+    font-size: 1rem; /* keep font size */
+}
+  
+footer h5 {
+    margin-bottom: 0.3rem; /* reduce spacing below headings */
+    font-weight: 700;
+}
+  
+footer hr {
+    margin: 0.25rem 0; /* reduce hr vertical margins */
+    border-color: rgba(255, 255, 255, 0.5);
+}
+  
+footer p,
+footer ul {
+    margin-bottom: 0rem; /* reduce paragraph and list bottom margin */
+}
+  
+footer ul li {
+    line-height: 1.4; /* tighten line spacing */
+}
+  
+footer .text-center small {
+    display: block;
+    margin-top: 0rem;
+}
+  
+  /* Optional: reduce col padding for more horizontal compression */
+footer .col-md-6 {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
 }

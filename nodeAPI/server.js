@@ -7,7 +7,11 @@ const app = express() // creates an express application to build a web server
 globalThis.rootPath = __dirname
 
 //allowing the cross origin resource sharing
-app.use(cors())
+app.use(cors({
+    origin: "http://localhost:9090", // frontend URL
+    credentials: true,
+    exposedHeaders: ["x-access-token"] // used for JWT token issuing and refresh
+  }));
 
 //json middle-ware for setting request content type to json in body
 app.use(express.json({limit:'2mb', extended:false}))

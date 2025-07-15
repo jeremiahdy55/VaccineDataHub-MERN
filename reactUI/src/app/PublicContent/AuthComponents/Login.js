@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../ReduxStore/UserAuth/UserAction";
-// import { login } from "../HTTPComms/UserAuth";
+import { loginUser } from "../../ReduxStore/User/UserAction";
 
 // Simple login page
 const Login = () => {

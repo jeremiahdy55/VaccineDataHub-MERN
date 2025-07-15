@@ -1,18 +1,20 @@
 import * as ActionTypes from "../ActionTypes";
 import axios from "axios";
-import { handleTokenFromResponse } from "../HandleToken";
+import { handleTokenFromResponse } from "../../JWTAuthentication/TokenAuthentication";
 
+// === Define Action Creators ===
 export const setUser = (user) => ({
   // this function expects that user is a JS object with schema similar to
   // UserReducer {user}
   type: ActionTypes.SET_USER_DATA,
-  payload: { user },
+  payload: user,
 });
 
 export const logoutUser = () => ({
   type: ActionTypes.LOGOUT_USER,
 });
 
+// === Define Thunks ===
 export const loginUser = (username, password) => {
   return async function (dispatch) {
     try {
@@ -60,3 +62,4 @@ export const registerUser = (userObj) => {
     }
   };
 };
+

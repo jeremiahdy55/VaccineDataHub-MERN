@@ -7,7 +7,7 @@ const { isAuthorized } = require("../jwtauth/JWTAuth");
 hospitalRouter.get("/getHospitals", isAuthorized, async (req, res) => {
   try {
     const hospitals = await HospitalModel.find().lean(); // return simple JSON object
-    res.status(201).json(hospitals);
+    res.status(201).json({ hospitals });
   } catch (err) {
     res.status(500).send("Error retrieving hospitals");
   }

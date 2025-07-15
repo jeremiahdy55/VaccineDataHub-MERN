@@ -37,7 +37,7 @@ const isAuthorized = (req, res, next) => {
 
         // Still within grace window — re-issue token
         if (now - decoded.exp <= GRACE_PERIOD_SEC) {
-          const newToken = generateToken(decoded);
+          const newToken = generateToken({ id: decoded.id, username: decoded.username });
           res.setHeader("x-access-token", newToken); // send it back in header
           req.user = decoded;
           return next();

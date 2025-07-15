@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../ReduxStore/User/UserAction";
 import EthnicityColumn from "./RegisterFormComponents/EthnicityColumn";
 import FormInput from "./RegisterFormComponents/FormInput";
-import { registerUser } from "../ReduxStore/UserAuth/UserAction";
 
 const RegisterUser = () => {
   // define hooks

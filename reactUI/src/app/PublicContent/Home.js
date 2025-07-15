@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 const Home = () => {
   const user = useSelector((state) => state.userReducer.user)
-  console.log({user})
   return (
     <>
       <h4> this will become the report home page with demographic breakdowns, watchlist, and data vis.</h4>
