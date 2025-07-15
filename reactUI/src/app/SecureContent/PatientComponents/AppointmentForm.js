@@ -37,11 +37,14 @@ const AppointmentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // add local timezone-midnight to the selected date
+    const dateWithLocalTZ = new Date(`${selectedDate}T00:00:00`);
     await dispatch(
       requestAppointment({
         vaccineId: selectedVaccine._id,
         hospitalId: selectedHospital._id,
-        appointmentDate: selectedDate,
+        appointmentDate: dateWithLocalTZ.toISOString(),
       })
     );
     navigate("/patient/vaccinationHistory");

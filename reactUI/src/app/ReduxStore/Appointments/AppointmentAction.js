@@ -103,7 +103,7 @@ export const getPendingAppointments = () => {
     try {
       const token = sessionStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:9000/api/appointment/getPendingAppointments/`,
+        `http://localhost:9000/api/appointment/getPendingAppointments`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

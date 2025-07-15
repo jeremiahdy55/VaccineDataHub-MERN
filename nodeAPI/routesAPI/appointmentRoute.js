@@ -25,21 +25,30 @@ appointmentRouter.get(
       const pendingAppointmentsRaw = await AppointmentModel.find({
         approved: false,
       })
-        .populate("userId", "-password")
+        .populate({
+          path: "userId",
+          select: "-password",
+          populate: {
+            path: "demographicData",
+            model: "demographicData",
+          },
+        })
         .lean(); // return simple JSON object
 
       // Rename the populated fields
       const pendingAppointments = pendingAppointmentsRaw.map((appt) => {
-        const { userId, hospitalId, vaccineId, ...rest } = appt;
+        const { userId, ...rest } = appt;
         return {
           ...rest,
-          user: userId
+          user: userId,
         };
       });
       return res.status(200).json({ appointments: pendingAppointments });
     } catch (err) {
-      return res.status(500).json({ error: "Error retrieving pending appointments" });
-    };
+      return res
+        .status(500)
+        .json({ error: "Error retrieving pending appointments" });
+    }
   }
 );
 
@@ -53,13 +62,10 @@ appointmentRouter.get("/getAppointments", isAuthorized, async (req, res) => {
     }).lean(); // return simple JSON object
     return res.status(200).json({ appointments: appointmentsForUser });
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        error:
-          "Error retrieving unpaid appointments for user with _id:" +
-          req.user.id,
-      });
+    res.status(500).json({
+      error:
+        "Error retrieving unpaid appointments for user with _id:" + req.user.id,
+    });
   }
 });
 
@@ -155,9 +161,25 @@ appointmentRouter.put(
         return res.status(404).json({
           error: `Could not find appointment with id: ${req.params.appointmentId}`,
         });
-      const pendingAppointments = await AppointmentModel.find({
+      const pendingAppointmentsRaw = await AppointmentModel.find({
         approved: false,
-      }).lean(); // return simple JSON object
+      })
+        .populate({
+          path: "userId",
+          select: "-password",
+          populate: {
+            path: "demographicData",
+            model: "demographicData",
+          },
+        })
+        .lean(); // return simple JSON object
+      const pendingAppointments = pendingAppointmentsRaw.map((appt) => {
+        const { userId, ...rest } = appt;
+        return {
+          ...rest,
+          user: userId,
+        };
+      });
       return res.status(200).json({ appointments: pendingAppointments });
     } catch (err) {
       console.log(err);
@@ -193,7 +215,9 @@ appointmentRouter.put(
           .json({ error: "You are not authorized to pay this appointment" });
       } else {
         if (appointment.paid) {
-          return res.status(409).json({ error: "Appointment has already been paid" });
+          return res
+            .status(409)
+            .json({ error: "Appointment has already been paid" });
         }
         appointment.paid = true;
         await appointment.save();

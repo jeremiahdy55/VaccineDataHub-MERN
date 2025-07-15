@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { getHospitals } from "../../ReduxStore/Hospital/HospitalAction";
 import { getVaccines } from "../../ReduxStore/Vaccine/VaccineAction";
 import { getAppointmentsByUserIdFromToken, payAppointment } from "../../ReduxStore/Appointments/AppointmentAction";
-import AppointmentDetailModal from "../AppointmentDetailModal";
+import AppointmentDetailModal from "./VaccinationHistoryComponents/AppointmentDetailModal";
+
 const VaccinationHistory = () => {
   // hooks
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   // get data from store
   const vaccines = useSelector((state) => state.vaccineReducer.vaccines) || [];
@@ -29,12 +29,11 @@ const VaccinationHistory = () => {
     };
   });
 
-  // repopulate the store if necessary
+  // repopulate the store
   useEffect(() => {
-    if (hospitals.length === 0) dispatch(getHospitals());
-    if (vaccines.length === 0) dispatch(getVaccines());
-    if (appointmentsRaw.length === 0)
-        dispatch(getAppointmentsByUserIdFromToken());
+    dispatch(getHospitals());
+    dispatch(getVaccines());
+    dispatch(getAppointmentsByUserIdFromToken());
   }, [dispatch]);
 
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -49,14 +48,21 @@ const VaccinationHistory = () => {
     await dispatch(payAppointment(appointment._id));
     setShowModal(false);
   }
-  const now = new Date();
 
+  const today = new Date();
+  today.setHours(0,0,0,0);;
   const futureAppointments = appointments
-    .filter((appt) => new Date(appt.appointmentDate) >= now)
+    .filter((appt) => {
+        const apptDate = new Date(appt.appointmentDate);
+        apptDate.setHours(0,0,0,0);
+        return (apptDate > today) || (!appt.approved || !appt.paid);})
     .sort((a, b) => new Date(a.appointmentDate) - new Date(b.appointmentDate));
 
   const pastAppointments = appointments
-    .filter((appt) => new Date(appt.appointmentDate) < now)
+    .filter((appt) => {
+        const apptDate = new Date(appt.appointmentDate);
+        apptDate.setHours(0,0,0,0);
+        return (apptDate <= today) && (appt.approved && appt.paid);})
     .sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate));
 
   const renderCard = (appt, idx, isFuture = false) => (

@@ -10,6 +10,7 @@ import Footer from "./Footer";
 import AppointmentForm from "../SecureContent/PatientComponents/AppointmentForm";
 import RegisterVaccineForm from "../SecureContent/AdminComponents/RegisterVaccineForm";
 import VaccinationHistory from "../SecureContent/PatientComponents/VaccinationHistory";
+import PendingAppointments from "../SecureContent/AdminComponents/PendingAppointments";
 
 // Declare routes here
 let AppContent = () => {
@@ -32,7 +33,7 @@ let AppContent = () => {
         <Route path="admin" element={<PrivateRoute />}>
             <Route index element={<MedicalDataGrid />} />
             <Route path="registerVaccine" element={<RegisterVaccineForm />} />
-            <Route path="pendingAppointments" element={<Home />} />
+            <Route path="pendingAppointments" element={<PendingAppointments />} />
         </Route>
         <Route path="patient" element={<PrivateRoute />}>
             <Route index element={<MedicalDataGrid />} />
