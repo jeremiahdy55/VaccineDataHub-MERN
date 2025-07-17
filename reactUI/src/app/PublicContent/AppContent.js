@@ -3,7 +3,7 @@ import { useLocation, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./Home";
 import Login from "./AuthComponents/Login";
 import RegisterUser from "./AuthComponents/RegisterUser";
-import Navbar from "./NavbarComponents/Navbar";
+import Navbar from "./Navbar";
 import PrivateRoute from "../SecureContent/PrivateRoute";
 import MedicalDataGrid from "../SecureContent/MedicalDataGrid";
 import Footer from "./Footer";

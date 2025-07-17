@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Navbar as BootstrapNavbar, Container } from "react-bootstrap";
-import NavbarSections from "./NavbarSection";
-import { logoutAndClearStore } from "../../ReduxStore/LogoutFunctionality";
+import NavbarSections from "./NavbarComponents/NavbarSection";
+import { logoutAndClearStore } from "../ReduxStore/LogoutFunctionality";
 
 const Navbar = () => {
   // hooks
