@@ -15,7 +15,7 @@ const appointmentReducer = (state = Initial_State, action) => {
     case ActionTypes.CLEAR_APPTS:
       return {
         ...state,
-        appointments: Initial_State.hospitals,
+        appointments: Initial_State.appointments,
       };
 
     default:

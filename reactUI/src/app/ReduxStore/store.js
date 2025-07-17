@@ -5,14 +5,21 @@ import userReducer from "./User/UserReducer";
 import hospitalReducer from "./Hospital/HospitalReducer";
 import vaccineReducer from "./Vaccine/VaccineReducer";
 import appointmentReducer from "./Appointments/AppointmentReducer";
+import demographicDataReducer from "./DemographicData/DemographicDataReducer";
 
 let rootReducer = combineReducers({
   userReducer,
   hospitalReducer,
   vaccineReducer,
-  appointmentReducer
+  appointmentReducer,
+  demographicDataReducer
 });
 
+// for production, use the store without logger() middleware
+// export default configureStore({reducer: rootReducer});
+
+
+// to debug during development, include store-logger middleware
 function logger({ getState }) {
   return (next) => (action) => {
     console.log("will dispatch", action);
@@ -30,3 +37,4 @@ export default configureStore(
   },
   {}
 );
+

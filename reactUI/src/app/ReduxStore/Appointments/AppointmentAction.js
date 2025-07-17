@@ -13,6 +13,27 @@ export const clearAppointmentStore = () => ({
 });
 
 // === Define Thunks ===
+export const getStrippedAppointments = () => {
+  return async function (dispatch) {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/appointment/getStrippedAppointments`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Set appointment data into store
+      const appointmentData = response.data.appointments;
+      dispatch(setAppointments(appointmentData));
+    } catch (err) {
+      console.error(`Error While Retrieving Stripped Appointments`, err);
+    }
+  };
+};
+
 export const getAppointmentsByUserIdFromToken = () => {
   return async function (dispatch) {
     try {

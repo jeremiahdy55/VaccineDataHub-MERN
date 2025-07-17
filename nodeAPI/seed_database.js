@@ -134,7 +134,7 @@ function getRandomDateWithin6Months() {
       await user.save();
 
       // each user has 1-3 appointments
-      const numAppointments = faker.datatype.number({ min: 1, max: 3 });
+      const numAppointments = faker.datatype.number({ min: 3, max: 5 });
 
       for (let j = 0; j < numAppointments; j++) {
         const vaccine = randomFromArray(vaccines);

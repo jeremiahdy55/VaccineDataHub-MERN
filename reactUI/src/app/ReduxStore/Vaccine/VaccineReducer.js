@@ -14,7 +14,7 @@ const vaccineReducer = (state = Initial_State, action) => {
         case ActionTypes.CLEAR_VACCINES:
           return {
             ...state,
-            vaccines: Initial_State.hospitals
+            vaccines: Initial_State.vaccines
           };
       default:
         return state;

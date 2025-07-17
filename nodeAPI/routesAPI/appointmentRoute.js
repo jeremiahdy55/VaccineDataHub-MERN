@@ -7,6 +7,19 @@ const VaccineModel = require("../models/vaccineModel");
 const UserModel = require("../models/userModel");
 const { isAuthorized } = require("../jwtauth/JWTAuth");
 
+appointmentRouter.get("/getStrippedAppointments", async (req, res) => {
+  try {
+    const strippedAppointments = await AppointmentModel.find().select(
+      "appointmentDate approved paid vaccineId userId"
+    );
+    return res.status(200).json({ appointments: strippedAppointments });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ error: "Error retrieving stripped appointments" });
+  }
+});
+
 appointmentRouter.get(
   "/getPendingAppointments",
   isAuthorized,

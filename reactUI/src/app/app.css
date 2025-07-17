@@ -129,3 +129,61 @@ footer .col-md-6 {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 }
+
+svg {
+    overflow: visible;
+}
+
+.vaccine-reporting-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 3fr);
+    gap: 1rem;
+    padding: 1rem;
+    height: 100%;
+    overflow-y: auto; 
+}
+  
+.vaccine-reporting-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    height: 100%; 
+}
+
+.custom-carousel-item {
+    border: 1px solid #7dd69b;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #7dd69b;
+    min-height: 6rem;
+    height: 6rem;
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.custom-carousel {
+    padding: 1rem;
+    background-color: #7dd69b;
+    height: 100%;
+    width: 75%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.carousel-control-prev {
+    left: -5rem; /* Push left arrow further left */
+  }
+  
+.carousel-control-next {
+    right: -5rem; /* Push right arrow further right */
+}
