@@ -250,7 +250,7 @@ const Home = () => {
             chartTitle={"Common Medical History Conditions"}
           />
         </div>
-        <div className="col-md-7 mt-5" style={{ height: "66vh" }}>
+        <div className="col-md-7 mt-5 ms-5" style={{ height: "66vh" }}>
           <div className="vaccine-reporting-grid">
             {vaccineNames.map((vaccineName) => {
               const oneDoseCount = vaccineOneDose[vaccineName] || 0;
