@@ -65,7 +65,7 @@ const VaccinationHistory = () => {
         return (apptDate <= today) && (appt.approved && appt.paid);})
     .sort((a, b) => new Date(b.appointmentDate) - new Date(a.appointmentDate));
 
-  const renderCard = (appt, idx, isFuture = false) => (
+  const renderApptCard = (appt, idx, isFuture = false) => (
     <div
       key={idx}
       className={`border rounded p-3 mb-3 shadow-sm ${isFuture ? "bg-secondary-subtle" : "bg-light"}`}
@@ -111,7 +111,7 @@ const VaccinationHistory = () => {
                   Upcoming Appointments
                 </h4>
                 {futureAppointments.map((appt, idx) =>
-                  renderCard(appt, idx, true)
+                  renderApptCard(appt, idx, true)
                 )}
               </>
             )}
@@ -122,7 +122,7 @@ const VaccinationHistory = () => {
                   Vaccination Record
                 </h4>
                 {pastAppointments.map((appt, idx) =>
-                  renderCard(appt, idx, false)
+                  renderApptCard(appt, idx, false)
                 )}
               </>
             )}
