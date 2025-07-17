@@ -25,7 +25,6 @@ const ethnicities = [
   "Other",
   "Prefer not to say",
 ];
-
 const medicalConditions = [
   "Anemia",
   "Asthma",
@@ -47,6 +46,23 @@ const medicalConditions = [
   "Thyroid disorder",
   "Autoimmune disorder",
   "Cancer (remission)",
+];
+
+const professionOptions = [
+  "Education",
+  "Technology",
+  "Healthcare",
+  "Finance",
+  "Construction / Trades",
+  "Retail / Customer Service",
+  "Hospitality",
+  "Transportation",
+  "Government",
+  "Arts / Media",
+  "Student",
+  "Unemployed",
+  "Retired",
+  "Other"
 ];
 
 function randomFromArray(arr) {
@@ -90,8 +106,10 @@ function getRandomDateWithin6Months() {
 
       const age = faker.datatype.number({ min: 18, max: 90 });
       const gender = randomFromArray(genderOptions);
-      const profession = faker.name.jobTitle();
-      const ethnicity = faker.helpers.shuffle(ethnicities).slice(0, faker.datatype.number({ min: 1, max: 3 }));
+      const profession = randomFromArray(professionOptions);
+      const ethnicity = (Math.random() < 0.5) 
+                          ? faker.helpers.shuffle(ethnicities).slice(0, faker.datatype.number({ min: 1, max: 4 }))
+                          : ["Prefer not to say"];
       const medicalHistory = faker.helpers.shuffle(medicalConditions).slice(0, faker.datatype.number({ min: 0, max: 4 }));
 
       const user = await UserModel.create({
