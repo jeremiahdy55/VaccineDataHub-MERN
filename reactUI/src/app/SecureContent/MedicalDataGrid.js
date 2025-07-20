@@ -35,7 +35,7 @@ const MedicalDataGrid = () => {
                     className="border rounded p-3 mb-3 bg-light shadow-sm"
                   >
                     <h5 className="mb-1">{h.name}</h5>
-                    <p className="mb-1 text-muted">{h.address}</p>
+                    <p className="mb-1 text-muted"><i>{h.address}</i></p>
                     <p className="mb-1">
                       <strong>Type:</strong> {h.type}
                     </p>

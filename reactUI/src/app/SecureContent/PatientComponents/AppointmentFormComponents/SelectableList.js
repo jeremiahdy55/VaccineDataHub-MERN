@@ -25,7 +25,7 @@ const SelectableList = ({ items, type, onSelect }) => {
                   {type === "hospital" ? (
                     <>
                       <h5 className="mb-1">{item.name}</h5>
-                      <p className="mb-1 text-muted">{item.address}</p>
+                      <p className="mb-1 text-muted"><i>{item.address}</i></p>
                       <p className="mb-1"><strong>Type:</strong> {item.type}</p>
                       <p className="mb-0"><strong>Service Charge:</strong> ${item.serviceCharge}</p>
                     </>

@@ -46,7 +46,6 @@ const Home = () => {
     "85-90+",
   ];
   const populationSize = demographicData.length;
-
   // groupBy objects (fields contain an array of appointment objects)
   const groupedByProfession = groupBy(
     demographicData,
@@ -92,7 +91,7 @@ const Home = () => {
         )
       : -1; // sentinel value
   const avgDosesPerDay = completedAppointments.length / diffDays; // either 0 or a positive value
-
+  const avgDosesPerMonth = completedAppointments.length / (diffDays / 30) // using a 30-day month on average
   // group appt objects by vaccine ID
   const apptsGroupedByVaccineId = groupBy(
     completedAppointments,
@@ -175,7 +174,12 @@ const Home = () => {
   }
 
   const carouselData = [
-    {message: ["Average doses per day"], stat:[avgDosesPerDay], decoration:["bold"], isPercentage:[false] }
+    {
+      label: "Average Dose Given",
+      message: ["Per Day", "Per Month"], 
+      stat:[avgDosesPerDay, avgDosesPerMonth], 
+      decoration:["bold", "bold"], 
+      isPercentage:[false, false] }
   ];
   let carouselMessage = [];
   let carouselStat = [];
@@ -183,7 +187,7 @@ const Home = () => {
   let carouselPercentageBool = [];
   for (const gender in groupedByGender) {
     carouselMessage.push(gender);
-    carouselStat.push(groupedByGender[gender].length);
+    carouselStat.push((groupedByGender[gender].length / populationSize) * 100);
     carouselDecoration.push("bold");
     carouselPercentageBool.push(true);
   }
@@ -200,7 +204,7 @@ const Home = () => {
     );
   })) {
     carouselMessage.push(age.label);
-    carouselStat.push(age.value);
+    carouselStat.push((age.value / populationSize) * 100);
     carouselDecoration.push("bold");
     carouselPercentageBool.push(true);
   }

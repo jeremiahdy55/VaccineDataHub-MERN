@@ -26,7 +26,11 @@ const PieChart = ({ data, populationSize, chartTitle }) => {
 
     const { width, height } = dimensions;
     const radius = Math.min(width, height) / 2;
-    const colors = d3.scaleOrdinal(d3.schemeCategory10);
+    // const colors = d3.scaleOrdinal(d3.schemeCategory10);
+    // manually chose colors, considering the labels are preset
+    const colors = d3.scaleOrdinal()
+      .domain(["Male", "Female", "Nonbinary", "Other"])
+      .range(["#1f66e5", "#c40000", "#228b22", "#ffa500"])
 
     // Clear previous SVG contents
     d3.select(svgRef.current).selectAll("*").remove();
@@ -50,7 +54,7 @@ const PieChart = ({ data, populationSize, chartTitle }) => {
       .enter()
       .append("path")
       .attr("d", arc)
-      .attr("fill", (_, i) => colors(i))
+      .attr("fill", d => colors(d.data.label))
       .attr("stroke", "#fff")
       .attr("stroke-width", 1.5);
     
@@ -69,7 +73,7 @@ const PieChart = ({ data, populationSize, chartTitle }) => {
       .attr("y", (_, i) => i * 50 - 10)
       .attr("width", 10)
       .attr("height", 10)
-      .attr("fill", (_, i) => colors(i));
+      .attr("fill", d => colors(d.data.label));
 
     // create text labels
     labelGroup

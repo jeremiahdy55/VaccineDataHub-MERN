@@ -11,6 +11,7 @@ const { vaccine_seed_data, hospital_seed_data } = require("./seed_data");
 
 // === Utility Functions ===
 const genderOptions = ["Male", "Female", "Nonbinary", "Other"];
+const genderProbabilities = [0.45, 0.45, 0.07, 0.03]
 const ethnicities = [
   "American Indian or Alaska Native",
   "Asian - East Asian",
@@ -69,6 +70,17 @@ function randomFromArray(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+function weightedRandom(items, weights) {
+  const total = weights.reduce((acc, w) => acc + w, 0);
+  const rnd = Math.random() * total;
+  let sum = 0;
+
+  for (let i = 0; i < items.length; i++) {
+      sum += weights[i];
+      if (rnd < sum) return items[i];
+  }
+}
+
 function getRandomDateWithin6Months() {
   const now = new Date();
   const range = 1000 * 60 * 60 * 24 * 30 * 6; // 6 months in ms
@@ -96,7 +108,7 @@ function getRandomDateWithin6Months() {
     const hospitals = await HospitalModel.find();
 
     // Randomly generate a user with random demographic data
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1000; i++) {
       const username = faker.internet.userName() + i;
       const name = faker.name.findName();
       const password = "asdf";
@@ -105,7 +117,7 @@ function getRandomDateWithin6Months() {
       const phoneNo = faker.phone.phoneNumber("##########");
 
       const age = faker.datatype.number({ min: 18, max: 90 });
-      const gender = randomFromArray(genderOptions);
+      const gender = weightedRandom(genderOptions, genderProbabilities);
       const profession = randomFromArray(professionOptions);
       const ethnicity = (Math.random() < 0.5) 
                           ? faker.helpers.shuffle(ethnicities).slice(0, faker.datatype.number({ min: 1, max: 4 }))
