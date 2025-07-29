@@ -30,8 +30,10 @@ const Home = () => {
   // repopulate the store
   useEffect(() => {
     dispatch(getStrippedAppointments());
-    dispatch(getVaccines());
     dispatch(getDemographicData());
+    if (vaccines.length === 0) {
+      dispatch(getVaccines());
+    }    
   }, [dispatch]);
 
   // === Chart Data/Constants ===

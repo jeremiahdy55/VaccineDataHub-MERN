@@ -10,6 +10,7 @@ const VaccinationHistory = () => {
   const dispatch = useDispatch();
 
   // get data from store
+  const user = useSelector((state) => state.userReducer.user); // since this is secured content, user will ALWAYS be populated
   const vaccines = useSelector((state) => state.vaccineReducer.vaccines) || [];
   const hospitals =
     useSelector((state) => state.hospitalReducer.hospitals) || [];
@@ -138,6 +139,7 @@ const VaccinationHistory = () => {
         onClose={() => setShowModal(false)}
         paymentBtnClick={() => payFromModal(selectedAppointment)}
         appointment={selectedAppointment}
+        userObj={user}
       />
     </>
   );

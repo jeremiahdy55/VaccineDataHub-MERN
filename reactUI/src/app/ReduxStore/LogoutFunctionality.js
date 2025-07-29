@@ -16,5 +16,6 @@ export const logoutAndClearStore = () => {
         dispatch(clearAppointmentStore());
         dispatch(logoutUser());    
         sessionStorage.removeItem("token");
+        window.location.href = "/";
     }
 };
