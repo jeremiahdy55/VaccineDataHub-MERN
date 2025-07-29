@@ -1,7 +1,8 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
+import { generateAppointmentPDF } from "../../../ReduxStore/GenerateAppointmentPDF";
 
-const AppointmentDetailModal = ({ show, onClose, paymentBtnClick, appointment }) => {
+const AppointmentDetailModal = ({ show, onClose, paymentBtnClick, appointment, userObj}) => {
   if (!appointment) return null;
 
   const { hospital, vaccine } = appointment;
@@ -70,17 +71,24 @@ const AppointmentDetailModal = ({ show, onClose, paymentBtnClick, appointment })
       </Modal.Body>
       {!appointment.approved ? (
         <Modal.Footer>
-        <span className="text-muted me-auto">
-          This appointment is awaiting approval.
+        <Button className="me-auto" variant="info" onClick={() => generateAppointmentPDF(appointment, userObj)}>
+          Download Vaccination Certificate
+        </Button>  
+        <span className="text-muted ms-auto">
+          Awaiting approval
         </span>
         </Modal.Footer>
       ) : !appointment.paid ? (
         <Modal.Footer>
-        <Button variant="warning" onClick={paymentBtnClick}>
+          <Button className="me-auto" variant="info" onClick={() => generateAppointmentPDF(appointment, userObj)}>
+          Download Vaccination Certificate
+        </Button>        
+        <Button className="ms-auto" variant="warning" onClick={paymentBtnClick}>
           Submit Payment
         </Button>
         </Modal.Footer>
       ) : (
+        // insert download from s3 bucket here
         <></>
       )}
     </Modal>

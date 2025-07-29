@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const schemaObj = mongoose.Schema;
+import { Schema, model } from "mongoose";
+const schemaObj = Schema;
 
 // // connect to localmachine MongoDB and create/use a database with name: {vaccinedatahub}
 // mongoose.connect(process.env.MONGO_URI);
@@ -62,5 +62,5 @@ const vaccineSchema = new schemaObj(
   }
 );
 
-const VaccineModel = mongoose.model("vaccine", vaccineSchema); // MongoDB will pluralize
-module.exports = VaccineModel;
+const VaccineModel = model("vaccine", vaccineSchema); // MongoDB will pluralize
+export default VaccineModel;

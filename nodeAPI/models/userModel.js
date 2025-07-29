@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs"); // for password hashing
-const schemaObj = mongoose.Schema;
+import { Schema, model } from "mongoose";
+import { genSalt, hash, compare } from "bcryptjs"; // for password hashing
+const schemaObj = Schema;
 
 const userSchema = new schemaObj(
   {
@@ -25,7 +25,7 @@ const userSchema = new schemaObj(
       ],
     },
     demographicData: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "demographicData",
     },
     adminPrivilege: {type: Boolean, default: false}
@@ -43,8 +43,8 @@ userSchema.pre("save", async function (next) {
   if (!user.isModified("password")) return next(); // only hash if new/changed
 
   try {
-    const salt = await bcrypt.genSalt(10); // 10 rounds of salting
-    user.password = await bcrypt.hash(user.password, salt);
+    const salt = await genSalt(10); // 10 rounds of salting
+    user.password = await hash(user.password, salt);
     next();
   } catch (err) {
     next(err);
@@ -55,8 +55,8 @@ userSchema.pre("save", async function (next) {
 // on file. The hashed password is validated with bcrypt taking care of matching the
 // the plain-text to hashed.
 userSchema.methods.comparePassword = async function (inputPassword) {
-  return await bcrypt.compare(inputPassword, this.password);
+  return await compare(inputPassword, this.password);
 };
 
-const UserModel = mongoose.model("user", userSchema); // MongoDB will pluralize
-module.exports = UserModel;
+const UserModel = model("user", userSchema); // MongoDB will pluralize
+export default UserModel;

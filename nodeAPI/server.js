@@ -1,7 +1,7 @@
 require("dotenv").config(); // inject environment variables from .env
-const express = require('express')
-const cors = require("cors")
-const mongoose = require("mongoose");
+import express, { json } from 'express';
+import cors from "cors";
+import { connect } from "mongoose";
 
 const app = express() // creates an express application to build a web server
 globalThis.rootPath = __dirname
@@ -14,19 +14,19 @@ app.use(cors({
   }));
 
 //json middle-ware for setting request content type to json in body
-app.use(express.json({limit:'2mb', extended:false}))
+app.use(json({limit:'2mb', extended:false}))
 
 // connect to localmachine MongoDB and create/use a database with name: {vaccinedatahub}
-mongoose.connect(process.env.MONGO_URI)
+connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB connected"))
 .catch(err => console.error("MongoDB connection error:", err));
 
 // route declarations
-const userRouter = require("./routesAuth/userRoute")
-const hospitalRouter = require("./routesAPI/hospitalRoute")
-const vaccineRouter = require("./routesAPI/vaccineRoute")
-const appointmentRouter = require("./routesAPI/appointmentRoute")
-const demographicDataRouter = require("./routesAPI/demographicDataRoute")
+import userRouter from "./routesAuth/userRoute";
+import hospitalRouter from "./routesAPI/hospitalRoute";
+import vaccineRouter from "./routesAPI/vaccineRoute";
+import appointmentRouter from "./routesAPI/appointmentRoute";
+import demographicDataRouter from "./routesAPI/demographicDataRoute";
 
 // assign endpoint bases to routers
 app.use("/user", userRouter)

@@ -1,9 +1,9 @@
-const express = require("express");
-const bcrypt = require("bcryptjs");
-const userRouter = express.Router({ strict: true, caseSensitive: true });
-const UserModel = require("../models/userModel");
-const DemographicDataModel = require("../models/demographicDataModel");
-const { generateToken, isAuthorized } = require("../jwtauth/JWTAuth");
+import { Router } from "express";
+import { compare } from "bcryptjs";
+const userRouter = Router({ strict: true, caseSensitive: true });
+import UserModel, { findOne } from "../models/userModel";
+import DemographicDataModel from "../models/demographicDataModel";
+import { generateToken, isAuthorized } from "../jwtauth/JWTAuth";
 
 // Register the user and log them in
 userRouter.post("/register", async (req, res) => {
@@ -70,13 +70,13 @@ userRouter.post("/login", async (req, res) => {
 
   try {
     // Find user by username
-    const user = await UserModel.findOne({ username }).lean();
+    const user = await findOne({ username }).lean();
     if (!user) {
       return res.status(401).json({ message: "Invalid username or password" });
     }
 
     // Compare hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid username or password" });
     }
@@ -104,4 +104,4 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
-module.exports = userRouter;
+export default userRouter;

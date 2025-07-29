@@ -1,21 +1,21 @@
-const mongoose = require("mongoose");
-const schemaObj = mongoose.Schema;
+import { Schema, model } from "mongoose";
+const schemaObj = Schema;
 
 const appointmentSchema = new schemaObj(
   {
     appointmentDate: { type: Date, required: true },
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
     hospitalId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "hospital",
       required: true,
     },
     vaccineId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "vaccine",
       required: true,
     },
@@ -29,5 +29,5 @@ const appointmentSchema = new schemaObj(
 );
 
 // Mongo will pluralize
-const AppointmentModel = mongoose.model("appointment", appointmentSchema); 
-module.exports = AppointmentModel;
+const AppointmentModel = model("appointment", appointmentSchema); 
+export default AppointmentModel;

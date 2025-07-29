@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const schemaObj = mongoose.Schema;
+import { Schema, model } from "mongoose";
+const schemaObj = Schema;
 
 // NOTE: static regex expressions are declared between forward-slashes
 // /<REGEX EXPRESSION>/
@@ -9,7 +9,7 @@ const schemaObj = mongoose.Schema;
 const demographicSchema = new schemaObj(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
@@ -59,10 +59,10 @@ const demographicSchema = new schemaObj(
 );
 
 // Force MongoDB to use "demographicData" as the name
-const DemographicDataModel = mongoose.model(
+const DemographicDataModel = model(
   "demographicData",
   demographicSchema,
   "demographicData"
 );
 
-module.exports = DemographicDataModel;
+export default DemographicDataModel;

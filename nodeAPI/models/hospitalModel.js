@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const schemaObj = mongoose.Schema;
+import { Schema, model } from "mongoose";
+const schemaObj = Schema;
 
 const hosptialSchema = new schemaObj(
   {
@@ -18,5 +18,5 @@ const hosptialSchema = new schemaObj(
   }
 );
 
-const HospitalModel = mongoose.model("hospital", hosptialSchema); // MongoDB will pluralize
-module.exports = HospitalModel;
+const HospitalModel = model("hospital", hosptialSchema); // MongoDB will pluralize
+export default HospitalModel;
