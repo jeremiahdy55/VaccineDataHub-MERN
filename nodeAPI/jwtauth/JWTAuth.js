@@ -1,15 +1,17 @@
-import { sign, verify, decode } from "jsonwebtoken";
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = "15m";
-const GRACE_PERIOD_SEC = 60 * 5; // 5 minutes
+import pkg from "jsonwebtoken";
+const { sign, verify, decode } = pkg;
 
-const generateToken = (user) => {
+export const generateToken = (user) => {
+  const JWT_SECRET = process.env.JWT_SECRET;
+  const JWT_EXPIRES_IN = "15m";
   return sign({ id: user._id, username: user.username }, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN,
   });
 };
 
-const isAuthorized = (req, res, next) => {
+export const isAuthorized = (req, res, next) => {
+  const JWT_SECRET = process.env.JWT_SECRET;
+  const GRACE_PERIOD_SEC = 60 * 5; // 5 minutes
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -37,7 +39,10 @@ const isAuthorized = (req, res, next) => {
 
         // Still within grace window — re-issue token
         if (now - decoded.exp <= GRACE_PERIOD_SEC) {
-          const newToken = generateToken({ id: decoded.id, username: decoded.username });
+          const newToken = generateToken({
+            id: decoded.id,
+            username: decoded.username,
+          });
           res.setHeader("x-access-token", newToken); // send it back in header
           req.user = decoded;
           return next();
@@ -54,5 +59,3 @@ const isAuthorized = (req, res, next) => {
     return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
-
-export default { generateToken, isAuthorized };

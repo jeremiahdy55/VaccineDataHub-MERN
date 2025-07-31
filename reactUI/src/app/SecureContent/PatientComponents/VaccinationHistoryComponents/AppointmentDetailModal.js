@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
-import { generateAppointmentPDF } from "../../../ReduxStore/GenerateAppointmentPDF";
+import { generateAppointmentPDF } from "./GenerateAppointmentPDF";
 
 const AppointmentDetailModal = ({ show, onClose, paymentBtnClick, appointment, userObj}) => {
   if (!appointment) return null;
@@ -25,6 +25,8 @@ const AppointmentDetailModal = ({ show, onClose, paymentBtnClick, appointment, u
         <h4 className="mb-3">
           {vaccine?.name} <br /> [ <i>{vaccine?.abbreviation}</i> ]
         </h4>
+
+        <h5>Appointment Date: {new Date(appointment.appointmentDate).toLocaleDateString()}</h5>
 
         <h6 className="text-muted">Hospital Info</h6>
         <p>

@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "builds restful api's using express over node framework",
     "main": "server.js",
+    "type": "module",
     "scripts": {
         "start": "nodemon server.js",
         "start1": "node server.js",

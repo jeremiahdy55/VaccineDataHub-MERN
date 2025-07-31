@@ -55,6 +55,16 @@ const vaccineSchema = new schemaObj(
         type: [String],
         default: [],
       },
+      recommendedAgeMin: {
+        type: Number,
+        required: true,
+        min: 0,
+      },
+      recommendedAgeMax: {
+        type: Number,
+        required: true,
+        max: 150,
+      },
     },
   },
   {

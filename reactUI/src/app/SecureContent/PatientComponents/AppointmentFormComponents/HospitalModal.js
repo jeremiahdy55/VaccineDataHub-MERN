@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import SelectableList from "./SelectableList";
+import SelectableHospitalList from "./SelectableHospitalList";
 
 const HospitalModal = ({ show, onClose, hospitals, onSelect }) => {
   const handleSelect = (hospital) => {
@@ -14,7 +14,7 @@ const HospitalModal = ({ show, onClose, hospitals, onSelect }) => {
         <Modal.Title>Choose Hospital</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <SelectableList items={hospitals} type="hospital" onSelect={handleSelect} />
+        <SelectableHospitalList items={hospitals} onSelect={handleSelect} />
       </Modal.Body>
     </Modal>
   );

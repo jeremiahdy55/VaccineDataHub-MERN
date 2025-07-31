@@ -80,6 +80,9 @@ const MedicalDataGrid = () => {
                     <p className="mb-1">
                       <strong>Doses Required:</strong> {v.dosesRequired}
                     </p>
+                    <p className="mb-1">
+                      <strong>Recommended for Patient Age Group:</strong> {v.info?.recommendedAgeMin} - {v.info?.recommendedAgeMax}
+                    </p>
                     {v.sideEffects?.length > 0 && (
                       <p className="mb-1">
                         <strong>Side Effects:</strong>{" "}

@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { compare } from "bcryptjs";
 const userRouter = Router({ strict: true, caseSensitive: true });
-import UserModel, { findOne } from "../models/userModel";
-import DemographicDataModel from "../models/demographicDataModel";
-import { generateToken, isAuthorized } from "../jwtauth/JWTAuth";
+import UserModel from "../models/userModel.js";
+import DemographicDataModel from "../models/demographicDataModel.js";
+import { generateToken, isAuthorized } from "../jwtauth/JWTAuth.js";
 
 // Register the user and log them in
 userRouter.post("/register", async (req, res) => {
@@ -70,7 +70,7 @@ userRouter.post("/login", async (req, res) => {
 
   try {
     // Find user by username
-    const user = await findOne({ username }).lean();
+    const user = await UserModel.findOne({ username }).lean();
     if (!user) {
       return res.status(401).json({ message: "Invalid username or password" });
     }

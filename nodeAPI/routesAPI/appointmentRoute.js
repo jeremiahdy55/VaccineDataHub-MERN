@@ -1,18 +1,18 @@
 import { Router } from "express";
 import { Types } from "mongoose";
 
-import AppointmentModel, { find, findOne, findByIdAndUpdate } from "../models/appointmentModel";
-import { findById } from "../models/hospitalModel";
-import { findById as _findById } from "../models/vaccineModel";
-import { findById as __findById } from "../models/userModel";
-import { isAuthorized } from "../jwtauth/JWTAuth";
-import { generateCompletedAppointmentPDF } from "../pdfgeneration/GenerateCompletedAppointmentPDF.cjs";
+import AppointmentModel from "../models/appointmentModel.js";
+import HospitalModel from "../models/hospitalModel.js";
+import VaccineModel from "../models/vaccineModel.js";
+import UserModel from "../models/userModel.js";
+import { isAuthorized } from "../jwtauth/JWTAuth.js";
+import { generateCompletedAppointmentPDF } from "../pdfgeneration/GenerateCompletedAppointmentPDF.js";
 
 const appointmentRouter = Router({ strict: true, caseSensitive: true });
 
 appointmentRouter.get("/getStrippedAppointments", async (req, res) => {
   try {
-    const strippedAppointments = await find().select(
+    const strippedAppointments = await AppointmentModel.find().select(
       "appointmentDate approved paid vaccineId userId"
     );
     return res.status(200).json({ appointments: strippedAppointments });
@@ -29,7 +29,7 @@ appointmentRouter.get(
   async (req, res) => {
     try {
       // Check that the user exists and has admin privileges in DB
-      const user = await __findById(req.user.id).lean();
+      const user = await UserModel.findById(req.user.id).lean();
       if (!user)
         return res.status(404).json({ error: "Invalid userId, not found" });
       if (!user.adminPrivilege)
@@ -38,7 +38,7 @@ appointmentRouter.get(
           .json({ error: "User does not have administrative privileges" });
 
       // Get the pending appointments and populate it with the respective data
-      const pendingAppointmentsRaw = await find({
+      const pendingAppointmentsRaw = await AppointmentModel.find({
         approved: false,
       })
         .populate({
@@ -70,10 +70,10 @@ appointmentRouter.get(
 
 appointmentRouter.get("/getAppointments", isAuthorized, async (req, res) => {
   try {
-    const user = await __findById(req.user.id).lean();
+    const user = await UserModel.findById(req.user.id).lean();
     if (!user)
       return res.status(404).json({ error: "Invalid userId, not found" });
-    const appointmentsForUser = await find({
+    const appointmentsForUser = await AppointmentModel.find({
       userId: req.user.id,
     }).lean(); // return simple JSON object
     return res.status(200).json({ appointments: appointmentsForUser });
@@ -100,25 +100,25 @@ appointmentRouter.post(
       }
 
       // Check that the vaccine, hospital, and user exists in DB
-      const user = await __findById(req.user.id).lean();
+      const user = await UserModel.findById(req.user.id).lean();
       if (!user) {
         return res.status(404).json({ error: "Invalid userId, not found" });
       } else {
         appointmentData.userId = req.user.id;
       }
-      const vaccine = await _findById(
+      const vaccine = await VaccineModel.findById(
         appointmentData.vaccineId
       ).lean();
       if (!vaccine)
         return res.status(404).json({ error: "Invalid vaccineId, not found" });
-      const hospital = await findById(
+      const hospital = await HospitalModel.findById(
         appointmentData.hospitalId
       ).lean();
       if (!hospital)
         return res.status(404).json({ error: "Invalid hospitalId, not found" });
 
       // Check if the exact same appointment is trying to be made
-      const existing = await findOne({
+      const existing = await AppointmentModel.findOne({
         userId: appointmentData.userId,
         hospitalId: appointmentData.hospitalId,
         vaccineId: appointmentData.vaccineId,
@@ -131,7 +131,7 @@ appointmentRouter.post(
       const appointment = new AppointmentModel(appointmentData);
       await appointment.save();
       // return all the appointments for this user
-      const appointmentsForUser = await find({
+      const appointmentsForUser = await AppointmentModel.find({
         userId: req.user.id,
       }).lean(); // return simple JSON object
       return res.status(200).json({ appointments: appointmentsForUser });
@@ -159,7 +159,7 @@ appointmentRouter.put(
         return res.status(400).json({ error: "Invalid appointmentId format" });
       }
       // Check that the user exists and has admin privileges in DB
-      const user = await __findById(req.user.id).lean();
+      const user = await UserModel.findById(req.user.id).lean();
       if (!user)
         return res.status(404).json({ error: "Invalid userId, not found" });
       if (!user.adminPrivilege)
@@ -168,7 +168,7 @@ appointmentRouter.put(
           .json({ error: "User does not have administrative privileges" });
 
       // Try to update the appointment to be approved
-      const appointment = await findByIdAndUpdate(
+      const appointment = await AppointmentModel.findByIdAndUpdate(
         req.params.appointmentId,
         { approved: true },
         { new: true }
@@ -177,7 +177,7 @@ appointmentRouter.put(
         return res.status(404).json({
           error: `Could not find appointment with id: ${req.params.appointmentId}`,
         });
-      const pendingAppointmentsRaw = await find({
+      const pendingAppointmentsRaw = await AppointmentModel.find({
         approved: false,
       })
         .populate({
@@ -216,14 +216,16 @@ appointmentRouter.put(
       }
 
       // Try to update the appointment to be paid
-      const appointment = await findOne({
+      const appointment = await AppointmentModel.findOne({
         _id: appointmentId,
         approved: true,
-      });
+      }).populate('hospitalId vaccineId userId');;
+
       if (!appointment)
         return res.status(404).json({
           error: `Could not find APPROVED appointment with id: ${appointmentId}`,
         });
+
       // only the appointment's owner-user can pay for the appointment
       if (appointment.userId.toString() !== req.user.id) {
         return res
@@ -240,7 +242,7 @@ appointmentRouter.put(
         console.log({appointment})
         generateCompletedAppointmentPDF(appointment);
       }
-      const appointmentsForUser = await find({
+      const appointmentsForUser = await AppointmentModel.find({
         userId: appointment.userId,
       }).lean(); // return simple JSON object
       return res.status(200).json({ appointments: appointmentsForUser });

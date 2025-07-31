@@ -1,11 +1,11 @@
 import { Router } from "express";
 const vaccineRouter = Router({ strict: true, caseSensitive: true });
-import VaccineModel, { find } from "../models/vaccineModel";
-import { isAuthorized } from "../jwtauth/JWTAuth";
+import VaccineModel from "../models/vaccineModel.js";
+import { isAuthorized } from "../jwtauth/JWTAuth.js";
 
 vaccineRouter.get("/getVaccines", async (req, res) => {
   try {
-    const vaccines = await find().lean(); // return simple JSON object
+    const vaccines = await VaccineModel.find().lean(); // return simple JSON object
     res.status(200).json({vaccines});
   } catch (err) {
     res.status(500).send("Error retrieving vaccines");
@@ -18,7 +18,7 @@ vaccineRouter.post("/registerVaccine", isAuthorized, async (req,res) => {
   try {
     const vaxToSave = new VaccineModel(vaccineObj);
     await vaxToSave.save();
-    const vaccines = await find().lean(); // return simple JSON object
+    const vaccines = await VaccineModel.find().lean(); // return simple JSON object
     res.status(201).json({vaccines});
   } catch (err) {
     console.log(err);

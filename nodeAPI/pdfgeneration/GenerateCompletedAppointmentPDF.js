@@ -1,5 +1,5 @@
-const fs = require("fs");
-const PdfPrinter = require("pdfmake");
+import fs from "fs";
+import PdfPrinter from "pdfmake";
 export const generateCompletedAppointmentPDF = (appointment) => {
 console.log({appointment})
 }

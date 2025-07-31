@@ -6,6 +6,7 @@ import VaccineModal from "./AppointmentFormComponents/VaccineModal";
 import { getHospitals } from "../../ReduxStore/Hospital/HospitalAction";
 import { getVaccines } from "../../ReduxStore/Vaccine/VaccineAction";
 import { requestAppointment } from "../../ReduxStore/Appointments/AppointmentAction";
+import { getDemographicData } from "../../ReduxStore/DemographicData/DemographicDataAction";
 
 const AppointmentForm = () => {
   // hooks
@@ -16,6 +17,9 @@ const AppointmentForm = () => {
   const hospitals =
     useSelector((state) => state.hospitalReducer.hospitals) || [];
   const vaccines = useSelector((state) => state.vaccineReducer.vaccines) || [];
+  const user = useSelector((state) => state.userReducer.user);
+  const demoData = useSelector((state) => state.demographicDataReducer.demographicData) || [];
+  const userDemoData = demoData.find(patient => patient.userId === user._id);
 
   // booleans to show the modals
   const [showHospitalModal, setShowHospitalModal] = useState(false);
@@ -30,6 +34,7 @@ const AppointmentForm = () => {
   useEffect(() => {
     if (hospitals.length === 0) dispatch(getHospitals());
     if (vaccines.length === 0) dispatch(getVaccines());
+    if (demoData.length === 0) dispatch(getDemographicData());
   }, [dispatch]);
 
   // Get today's date in YYYY-MM-DD format for appointmentDate.min attribute
@@ -128,6 +133,7 @@ const AppointmentForm = () => {
           setSelectedVaccine(v);
           setShowVaccineModal(false);
         }}
+        age={(userDemoData) ? userDemoData.age : 0}
       />
     </div>
   );

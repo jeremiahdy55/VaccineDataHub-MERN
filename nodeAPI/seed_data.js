@@ -9,6 +9,8 @@ export const vaccine_seed_data = [
     dosesRequired: 2,
     info: {
       strainsCovered: ["SARS-CoV-2", "Omicron BA.4/BA.5", "Delta"],
+      recommendedAgeMin: 18,
+      recommendedAgeMax: 150,
     },
   },
   {
@@ -21,6 +23,8 @@ export const vaccine_seed_data = [
     dosesRequired: 2,
     info: {
       strainsCovered: ["SARS-CoV-2", "Omicron XBB", "Alpha"],
+      recommendedAgeMin: 0,
+      recommendedAgeMax: 50,
     },
   },
   {
@@ -33,6 +37,8 @@ export const vaccine_seed_data = [
     dosesRequired: 1,
     info: {
       strainsCovered: ["SARS-CoV-2"],
+      recommendedAgeMin: 0,
+      recommendedAgeMax: 39,
     },
   },
   {
@@ -45,6 +51,8 @@ export const vaccine_seed_data = [
     dosesRequired: 1,
     info: {
       strainsCovered: ["Mycobacterium tuberculosis"],
+      recommendedAgeMin: 29,
+      recommendedAgeMax: 51,
     },
   },
   {
@@ -57,6 +65,8 @@ export const vaccine_seed_data = [
     dosesRequired: 3,
     info: {
       strainsCovered: ["Hepatitis B virus"],
+      recommendedAgeMin: 41,
+      recommendedAgeMax: 99,
     },
   },
   {
@@ -69,6 +79,8 @@ export const vaccine_seed_data = [
     dosesRequired: 4,
     info: {
       strainsCovered: ["Poliovirus types 1, 2, 3"],
+      recommendedAgeMin: 17,
+      recommendedAgeMax: 31,
     },
   },
   {
@@ -85,6 +97,8 @@ export const vaccine_seed_data = [
         "Clostridium tetani",
         "Bordetella pertussis",
       ],
+      recommendedAgeMin: 18,
+      recommendedAgeMax: 150,
     },
   },
   {
@@ -97,6 +111,8 @@ export const vaccine_seed_data = [
     dosesRequired: 2,
     info: {
       strainsCovered: ["HPV types 6, 11, 16, 18, 31, 33, 45, 52, 58"],
+      recommendedAgeMin: 18,
+      recommendedAgeMax: 150,
     },
   },
   {
@@ -109,6 +125,8 @@ export const vaccine_seed_data = [
     dosesRequired: 1,
     info: {
       strainsCovered: ["Zaire ebolavirus"],
+      recommendedAgeMin: 18,
+      recommendedAgeMax: 150,
     },
   },
   {
@@ -121,6 +139,8 @@ export const vaccine_seed_data = [
     dosesRequired: 1,
     info: {
       strainsCovered: ["Salmonella Typhi"],
+      recommendedAgeMin: 0,
+      recommendedAgeMax: 79,
     },
   },
   {
@@ -133,6 +153,8 @@ export const vaccine_seed_data = [
     dosesRequired: 2,
     info: {
       strainsCovered: ["Japanese encephalitis virus"],
+      recommendedAgeMin: 30,
+      recommendedAgeMax: 69,
     },
   },
   {
@@ -145,6 +167,8 @@ export const vaccine_seed_data = [
     dosesRequired: 1,
     info: {
       strainsCovered: ["Variola virus"],
+      recommendedAgeMin: 0,
+      recommendedAgeMax: 99,
     },
   },
   {
@@ -157,6 +181,8 @@ export const vaccine_seed_data = [
     dosesRequired: 5,
     info: {
       strainsCovered: ["Bacillus anthracis"],
+      recommendedAgeMin: 0,
+      recommendedAgeMax: 99,
     },
   },
   {
@@ -169,6 +195,8 @@ export const vaccine_seed_data = [
     dosesRequired: 3,
     info: {
       strainsCovered: ["SARS-CoV-2"],
+      recommendedAgeMin: 69,
+      recommendedAgeMax: 99,
     },
   },
   {
@@ -181,6 +209,8 @@ export const vaccine_seed_data = [
     dosesRequired: 1,
     info: {
       strainsCovered: ["Vibrio cholerae O1"],
+      recommendedAgeMin: 40,
+      recommendedAgeMax: 79,
     },
   },
   {
@@ -193,6 +223,8 @@ export const vaccine_seed_data = [
     dosesRequired: 3,
     info: {
       strainsCovered: ["Tick-borne encephalitis virus"],
+      recommendedAgeMin: 65,
+      recommendedAgeMax: 99,
     },
   },
 ];

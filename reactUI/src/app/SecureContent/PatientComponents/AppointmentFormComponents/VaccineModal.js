@@ -1,8 +1,8 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import SelectableList from "./SelectableList";
+import SelectableVaccineList from "./SelectableVaccineList";
 
-const VaccineModal = ({ show, onClose, vaccines, onSelect }) => {
+const VaccineModal = ({ show, onClose, vaccines, onSelect, age }) => {
   const handleSelect = (vaccine) => {
     onSelect(vaccine);
     onClose();
@@ -14,7 +14,7 @@ const VaccineModal = ({ show, onClose, vaccines, onSelect }) => {
         <Modal.Title>Choose Vaccine</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <SelectableList items={vaccines} type="vaccine" onSelect={handleSelect} />
+        <SelectableVaccineList itemsRaw={vaccines} onSelect={handleSelect} userAge={age}/>
       </Modal.Body>
     </Modal>
   );

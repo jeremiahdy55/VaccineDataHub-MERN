@@ -3,14 +3,15 @@ const demographicDataRouter = Router({
   strict: true,
   caseSensitive: true,
 });
-import { find } from "../models/demographicDataModel";
-import { isAuthorized } from "../jwtauth/JWTAuth";
+import DemographicDataModel from "../models/demographicDataModel.js";
+import UserModel from "../models/userModel.js";
+import { isAuthorized } from "../jwtauth/JWTAuth.js";
 
 // Get all demographic data
 demographicDataRouter.get("/getDemographicData", async (req, res) => {
   try {
     // return simple array of simple JSON objects WITHOUT userId
-    const demoData = await find().lean();
+    const demoData = await DemographicDataModel.find().lean();
     res.status(200).json({ demographicData: demoData });
   } catch (err) {
     res.status(500).json({error: "Error retrieving demographic data"});
@@ -63,7 +64,7 @@ demographicDataRouter.post(
 
     // profession
     if (Array.isArray(professions) && professions.length > 0) {
-      filter.profession = { $in: professions }; // ✅ correct key: singular
+      filter.profession = { $in: professions };
     }
 
     // medicalHistory
@@ -73,7 +74,7 @@ demographicDataRouter.post(
 
     // find all data that fits the filter that was passed
     try {
-      const demoData = await find(filter).lean(); // return simple JSON object, not Mongo Obj
+      const demoData = await DemographicDataModel.find(filter).lean(); // return simple JSON object, not Mongo Obj
       res.status(200).json({ demographicData: demoData });
     } catch (err) {
       res.status(500).json({error: "Error retrieving demographic data"});

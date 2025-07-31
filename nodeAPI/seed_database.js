@@ -1,13 +1,16 @@
-require("dotenv").config(); // inject environment variables from .env
-import { connect, disconnect } from "mongoose";
-import { internet, name as _name, address as _address, phone, datatype, helpers } from "faker"; // used for making fake data
+import dotenv from "dotenv";
+dotenv.config(); // inject environment variables from .env
 
-import { deleteMany, insertMany, find } from "./models/vaccineModel";
-import { deleteMany as _deleteMany, insertMany as _insertMany, find as _find } from "./models/hospitalModel";
-import { deleteMany as __deleteMany, create } from "./models/demographicDataModel";
-import { deleteMany as ___deleteMany, create as _create } from "./models/userModel";
-import { deleteMany as ____deleteMany, create as __create } from "./models/appointmentModel";
-import { vaccine_seed_data, hospital_seed_data } from "./seed_data";
+import { connect, disconnect } from "mongoose";
+import pkg from "faker"; // used for making fake data
+const { internet, name: _name, address: _address, phone, datatype, helpers } = pkg;
+
+import VaccineModel from "./models/vaccineModel.js";
+import HospitalModel from "./models/hospitalModel.js";
+import DemographicDataModel from "./models/demographicDataModel.js";
+import UserModel from "./models/userModel.js";
+import AppointmentModel from "./models/appointmentModel.js";
+import { vaccine_seed_data, hospital_seed_data } from "./seed_data.js";
 
 // === Utility Functions ===
 const genderOptions = ["Male", "Female", "Nonbinary", "Other"];
@@ -94,18 +97,18 @@ function getRandomDateWithin6Months() {
     console.log("🔗 Connected to MongoDB.");
 
     // Clear existing data
-    await deleteMany(); 
-    await _deleteMany(); 
-    await ___deleteMany();
-    await __deleteMany();
-    await ____deleteMany();
+    await VaccineModel.deleteMany(); 
+    await HospitalModel.deleteMany(); 
+    await DemographicDataModel.deleteMany();
+    await UserModel.deleteMany();
+    await AppointmentModel.deleteMany();
 
     // Populate vaccine and hospital data
-    await insertMany(vaccine_seed_data);
-    await _insertMany(hospital_seed_data);
+    await VaccineModel.insertMany(vaccine_seed_data);
+    await HospitalModel.insertMany(hospital_seed_data);
 
-    const vaccines = await find();
-    const hospitals = await _find();
+    const vaccines = await VaccineModel.find();
+    const hospitals = await HospitalModel.find();
 
     // Randomly generate a user with random demographic data
     for (let i = 0; i < 1000; i++) {
@@ -124,7 +127,7 @@ function getRandomDateWithin6Months() {
                           : ["Prefer not to say"];
       const medicalHistory = helpers.shuffle(medicalConditions).slice(0, datatype.number({ min: 0, max: 4 }));
 
-      const user = await _create({
+      const user = await UserModel.create({
         username,
         name,
         password,
@@ -133,7 +136,7 @@ function getRandomDateWithin6Months() {
         email,
       });
 
-      const demographic = await create({
+      const demographic = await DemographicDataModel.create({
         userId: user._id,
         age,
         gender,
@@ -154,7 +157,7 @@ function getRandomDateWithin6Months() {
         const appointmentDate = getRandomDateWithin6Months();
         const isPast = appointmentDate < new Date();
 
-        await __create({
+        await AppointmentModel.create({
           appointmentDate,
           userId: user._id,
           hospitalId: hospital._id,
@@ -169,7 +172,7 @@ function getRandomDateWithin6Months() {
       }
     }
 
-    const adminUser = await _create({
+    const adminUser = await UserModel.create({
       username: "admin",
       name: "Administrator",
       password: "admin",

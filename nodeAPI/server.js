@@ -1,4 +1,12 @@
-require("dotenv").config(); // inject environment variables from .env
+import dotenv from "dotenv";
+dotenv.config(); // inject environment variables from .env
+
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 import express, { json } from 'express';
 import cors from "cors";
 import { connect } from "mongoose";
@@ -22,11 +30,11 @@ connect(process.env.MONGO_URI)
 .catch(err => console.error("MongoDB connection error:", err));
 
 // route declarations
-import userRouter from "./routesAuth/userRoute";
-import hospitalRouter from "./routesAPI/hospitalRoute";
-import vaccineRouter from "./routesAPI/vaccineRoute";
-import appointmentRouter from "./routesAPI/appointmentRoute";
-import demographicDataRouter from "./routesAPI/demographicDataRoute";
+import userRouter from "./routesAuth/userRoute.js";
+import hospitalRouter from "./routesAPI/hospitalRoute.js";
+import vaccineRouter from "./routesAPI/vaccineRoute.js";
+import appointmentRouter from "./routesAPI/appointmentRoute.js";
+import demographicDataRouter from "./routesAPI/demographicDataRoute.js";
 
 // assign endpoint bases to routers
 app.use("/user", userRouter)

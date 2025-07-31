@@ -1,8 +1,3 @@
-// import pdfMake from "pdfmake/build/pdfmake";
-// import pdfFonts from "pdfmake/build/vfs_fonts";
-
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 export const generateAppointmentPDF = async (appointment, userObj) => {
 
   const pdfMakeModule = await import("pdfmake/build/pdfmake");
@@ -39,6 +34,14 @@ export const generateAppointmentPDF = async (appointment, userObj) => {
       {
         text: `${vaccine?.name || "Unknown Vaccine"}\n[ ${vaccine?.abbreviation || "N/A"} ]`,
         style: "subheader",
+        margin: [0, 0, 0, 10],
+      },
+
+      { text: "Appointment Date", style: "sectionHeader" },
+      {
+        ul: [
+          `${new Date(appointment.appointmentDate).toLocaleDateString()}`,
+        ],
         margin: [0, 0, 0, 10],
       },
 
