@@ -227,7 +227,7 @@ appointmentRouter.put(
         });
 
       // only the appointment's owner-user can pay for the appointment
-      if (appointment.userId.toString() !== req.user.id) {
+      if (appointment.userId._id.toString() !== req.user.id) {
         return res
           .status(403)
           .json({ error: "You are not authorized to pay this appointment" });
