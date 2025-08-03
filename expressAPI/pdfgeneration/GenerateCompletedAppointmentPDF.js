@@ -32,6 +32,13 @@ export const generateCompletedAppointmentPDF = (appointment) => {
       paid,
     } = appointment;
 
+    // determine if appointment has been completed
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const apptDate = new Date(appointment.appointmentDate);
+    apptDate.setHours(0,0,0,0);
+    const isCompleted = apptDate <= today;
+
     // simple currency formatter for US dollar
     const formatCurrency = (value) =>
       new Intl.NumberFormat("en-US", {
@@ -61,6 +68,14 @@ export const generateCompletedAppointmentPDF = (appointment) => {
             vaccine?.abbreviation || "N/A"
           } ]`,
           style: "subheader",
+          margin: [0, 0, 0, 10],
+        },
+
+        { text: "Appointment Date", style: "sectionHeader" },
+        {
+          ul: [
+            `${new Date(appointment.appointmentDate).toLocaleDateString()}`,
+          ],
           margin: [0, 0, 0, 10],
         },
 
@@ -123,12 +138,8 @@ export const generateCompletedAppointmentPDF = (appointment) => {
         },
 
         {
-          text: approved
-            ? paid
-              ? ""
-              : "This appointment is approved but not yet paid."
-            : "This appointment is awaiting approval.",
-          color: approved ? (paid ? "green" : "blue") : "gray",
+          text: isCompleted ? "This appointment has been completed." : "This appointment has been paid and is upcoming.",
+          color: "blue",
           italics: true,
           alignment: "left",
           margin: [0, 10, 0, 0],
