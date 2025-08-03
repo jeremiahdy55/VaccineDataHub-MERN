@@ -7,6 +7,7 @@ import VaccineModel from "../models/vaccineModel.js";
 import UserModel from "../models/userModel.js";
 import { isAuthorized } from "../jwtauth/JWTAuth.js";
 import { generateCompletedAppointmentPDF } from "../pdfgeneration/GenerateCompletedAppointmentPDF.js";
+import { getPresignedURL } from "../pdfgeneration/S3BucketAccess.js";
 
 const appointmentRouter = Router({ strict: true, caseSensitive: true });
 
@@ -219,7 +220,7 @@ appointmentRouter.put(
       const appointment = await AppointmentModel.findOne({
         _id: appointmentId,
         approved: true,
-      }).populate('hospitalId vaccineId userId');;
+      }).populate('hospitalId vaccineId userId');
 
       if (!appointment)
         return res.status(404).json({
@@ -232,15 +233,20 @@ appointmentRouter.put(
           .status(403)
           .json({ error: "You are not authorized to pay this appointment" });
       } else {
+        // reject if the appointment is already paid
         if (appointment.paid) {
           return res
             .status(409)
             .json({ error: "Appointment has already been paid" });
         }
         appointment.paid = true;
+
+        // create the pdf, save it into s3 bucket, then remember the url in mongo DB
+        const url = await generateCompletedAppointmentPDF(appointment);
+        console.log(url);
+        appointment.pdfURL = url;
+
         await appointment.save();
-        console.log({appointment})
-        generateCompletedAppointmentPDF(appointment);
       }
       const appointmentsForUser = await AppointmentModel.find({
         userId: appointment.userId,
@@ -249,6 +255,37 @@ appointmentRouter.put(
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: "Error in paying appointment" });
+    }
+  }
+);
+
+appointmentRouter.get(
+  "/downloadAppointmentPDF/:appointmentId",
+  isAuthorized,
+  async (req, res) => {
+    const appointmentId = req.params.appointmentId;
+    try {
+      // check if they are valid object id
+      if (!Types.ObjectId.isValid(appointmentId)) {
+        return res.status(400).json({ error: "Invalid appointmentId format" });
+      }
+      // retrieve the appointment object from Mongo DB
+      const appointment = await AppointmentModel.findOne({
+        _id: appointmentId,
+        pdfURL: { $exists: true, $ne: null }
+      });
+
+      // check if an appointment was found
+      if (!appointment) {
+        return res.status(404).json({ error: "No appointment found with this Id and a valid pdfURL" });
+      }
+
+      // Generate the presigned URL to download the appointment PDF from s3 bucket
+      const presignedURL = await getPresignedURL(appointment.pdfURL);
+      return res.status(200).json({ presignedURL: presignedURL });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Error in retrieving appointment downloadable link" });
     }
   }
 );

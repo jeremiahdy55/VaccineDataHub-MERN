@@ -20,7 +20,8 @@ const appointmentSchema = new schemaObj(
       required: true,
     },
     approved: { type: Boolean, default: false },
-    paid: { type: Boolean, default: false}
+    paid: { type: Boolean, default: false},
+    pdfURL: { type: String, required: false }
   },
   {
     minimize: false,

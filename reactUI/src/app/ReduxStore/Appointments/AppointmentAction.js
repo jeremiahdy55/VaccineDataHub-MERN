@@ -169,3 +169,49 @@ export const approveAppointment = (appointmentId) => {
     }
   };
 };
+
+export const downloadAppointment = (appointmentId) => {
+  return async function () {
+    console.log("downloading!")
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await axios.get(
+        `http://localhost:9000/api/appointment/downloadAppointmentPDF/${appointmentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // Get token
+      handleTokenFromResponse(response);
+
+      console.log(response.data)
+      const x = response.data;
+      console.log({x})
+      const { presignedURL } = response.data;
+      console.log(presignedURL.toString());
+
+      // Fetch the PDF file as a Blob
+      const pdfResponse = await fetch(presignedURL);
+      if (!pdfResponse.ok) throw new Error("Failed to fetch PDF");
+
+      const blob = await pdfResponse.blob();
+
+      // Create a blob URL and trigger download
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `appointment-${appointmentId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(`Error While Downloading Appointment: ${appointmentId}`, err);
+    }
+  };
+};

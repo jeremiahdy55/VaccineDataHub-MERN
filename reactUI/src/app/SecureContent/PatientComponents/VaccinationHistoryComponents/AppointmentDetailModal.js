@@ -1,11 +1,14 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import { generateAppointmentPDF } from "./GenerateAppointmentPDF";
+import { downloadAppointment } from "../../../ReduxStore/Appointments/AppointmentAction";
+import { useDispatch } from "react-redux";
 
 const AppointmentDetailModal = ({ show, onClose, paymentBtnClick, appointment, userObj}) => {
   if (!appointment) return null;
 
   const { hospital, vaccine } = appointment;
+  const dispatch = useDispatch();
 
   // string format the price
   const formatCurrency = (value) =>
@@ -91,7 +94,11 @@ const AppointmentDetailModal = ({ show, onClose, paymentBtnClick, appointment, u
         </Modal.Footer>
       ) : (
         // insert download from s3 bucket here
-        <></>
+        <Modal.Footer>
+          <Button className="ms-auto" variant="success" onClick={() => dispatch(downloadAppointment(appointment._id))}>
+          Download Vaccination Certificate
+        </Button>        
+        </Modal.Footer>
       )}
     </Modal>
   );
