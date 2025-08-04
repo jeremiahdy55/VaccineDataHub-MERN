@@ -1,6 +1,6 @@
 # AVAA - Assistant for Vaccination Appointments and Analytics
 
-Project Duration: June 2025 - July 2025
+Project Duration: July 2025 (one month)
 
 ## Table of Contents
 - [Project Overview](#1-project-overview)
