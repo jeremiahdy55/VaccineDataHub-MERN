@@ -84,7 +84,7 @@ Using the AWS Console, navigate to the IAM section and create a new policy. Sele
 }
 ```
 
-Be sure to replace **"INSERT THE S3 BUCKET NAME HERE"** with the actual name of the newly created S3 bucket. Name the policy something unique. This policy will allow programmatic access to specifically the newly created bucket.
+Be sure to replace `<INSERT THE S3 BUCKET NAME HERE>` with the actual name of the newly created S3 bucket. Name the policy something unique. This policy will allow programmatic access to specifically the newly created bucket.
 
 Afterwards, navigate in the IAM section to create a new user. Select *Attach Policies Directly*, and search for the policy you had just created and attach it to this new user. Then finalize creating the user.
 
