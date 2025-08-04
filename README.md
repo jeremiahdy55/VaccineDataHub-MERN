@@ -29,9 +29,15 @@ Basic analytics, such as demographic distributions by gender, age, and professio
 
 ## 2. Tech Stack
 
-### Express API
+### Backend - Express API
 
-### React UI
+The Express API techstack utilizes a number of modern Node packages to build a scalable backend API. The core framework is *Express.js* which handles HTTP requests and routing. *mongoose* is used for interacting with a local *Mongo DB* database. *dotenv* manages environment variables holding sensitive information, and *cors* ensures proper cross-origin resource sharing. For authentication, the app uses *jsonwebtoken* (JWT) for token-based authentication with a graceful token-refresh period. User's passwords are hashed using *bcryptjs*. *faker* is used for generating random mock data for development and testing. *pdfmake* is used for generating certificate PDFs for vaccination appointments, and the *AWS-SDK S3* modules are used for interacting with the AWS environment and resources, which includes uploading PDFs and generating presigned URLs for users to download from the bucket directly.
+
+### Frontend - React UI
+
+The React UI techstack utilizes a number of modern UI-related packages to build a clean, navigable client-side user experience. The core framework is *React.js* and its related packages which allows for dynamic component-based UI, routing within React, single-paged applications (SPA), and integration with *Bootstrap* for styling. *redux* is used for state management across a user's site session. *axios* is used for Promise-based communication with the Express API. *d3* is used for dynamic data visualizations. *pdfmake* is used for generating certificate PDFs on client-side (particularly for appointments that have not yet been completed).
+
+Webpack is used to compile and bundle JS, CSS, and other static assets into optimized files that are ready to be served to the browser. For styling, it uses *css-loader* to process CSS imports within JavaScript modules and *style-loader* to inject those styles dynamically into the HTML document at runtime. The *HTML Webpack Plugin* automates the injection of the generated JS and CSS bundles into the root HTML file. *Babel* serves as the JS transpiler, converting modern JS (ES6+ features) and JSX syntax into backwards-compatible ES5 code for a wider range of browser support.
 
 ## 3. Installation & Setup
 
@@ -110,6 +116,7 @@ npm start
 
 through a terminal in their respective directories.
 
+NOTE: The backend runs on port 9000 and the frontend runs on port 9090. Please ensure these ports are available before starting the respective applications.
 
 ## 4. Future Steps
 
