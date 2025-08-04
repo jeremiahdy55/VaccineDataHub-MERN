@@ -13,13 +13,9 @@
     "keywords": [
         "Fast",
         "unopinionated",
-        "minimalist",
-        "web",
-        "framework",
-        "for",
-        "Node.js"
+        "minimalist"
     ],
-    "author": "sit",
+    "author": "Jeremiah Dy",
     "license": "MIT",
     "dependencies": {
         "@aws-sdk/client-s3": "^3.859.0",
