@@ -124,4 +124,5 @@ To expand on this project into a more fully-developed production style applicati
 - Integrate secure payment processing through a third-party payment gateway.
 - Expand analytics capabilities with advanced visualizations and filtering options based on demographic data (age, gender, profession, etc.).
 - Revamp the user interface (UI) with a modern, responsive design for improved user experience across devices.
+- Email notification reminders about upcoming appointments.
 
