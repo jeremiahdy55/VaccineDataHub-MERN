@@ -96,9 +96,15 @@ Afterwards, navigate in the IAM section to create a new user. Select *Attach Pol
 
 Lastly, select the newly created IAM user for more info and select *Security Credentials*. Navigate downward on this page to the *Access Keys* section. Create a new access key for this user, selecting either **Local Code** or **Other** as the primary use case for the key. If desired, create a short description for the key as well. Afterwards, finish creating the key and download the **.csv** file that contains the access key and secret key components.
 
-#### Configuring the .env file
+#### Configuring the `.env` file
 
-This project uses the *dotenv* package to inject sensitive information into the Express API when run. Accordingly, the `.env.txt` file must be configured before the application can run. Upon opening the file, replace the placeholder values with your own custom JWT authentication key (or generate one and paste it in), AWS region provider, S3 bucket name, and IAM user's access key and secret key components. Additionally, the Mongo DB URL can be configured to access a remote database rather than the local computer. After configuration, delete all comments and remove the `.txt` file extension. The new file should be named `.env` and will contain sensitive data.
+This project uses the *dotenv* package to inject sensitive information into the Express API when run. Accordingly, the `.env.txt` file must be configured before the application can run. Upon opening the file, replace the placeholder values with your own:
+- Custom JWT authentication key (or generate one and paste it in)
+- AWS region provider
+- S3 bucket name
+- IAM user's access key and secret key components
+
+Additionally, the *MongoDB* URL can be configured to access a remote database rather than the local computer. After configuration, delete all comments and remove the `.txt` file extension. The new file should be named `.env` and will contain sensitive data.
 
 ### Frontend and Backend Application Setup (/node_modules)
 
