@@ -94,7 +94,7 @@ Be sure to replace `<INSERT THE S3 BUCKET NAME HERE>` with the actual name of th
 
 Afterwards, navigate in the IAM section to create a new user. Select *Attach Policies Directly*, and search for the policy you had just created and attach it to this new user. Then finalize creating the user.
 
-Lastly, select the newly created IAM user for more info and select *Security Credentials*. Navigate downward on this page to the *Access Keys* section. Create a new access key for this user, selecting either **Local Code** or **Other** as the primary use case for the key. If desired, create a short description for the key as well. Afterwards, finish creating the key and download the **.csv** file that contains the access key and secret key components.
+Lastly, select the newly created IAM user for more info and select *Security Credentials*. Navigate downward on this page to the *Access Keys* section. Create a new access key for this user, selecting either **Local Code** or **Other** as the primary use case for the key. If desired, create a short description for the key as well. Afterwards, finish creating the key and download the `.csv` file that contains the access key and secret key components.
 
 #### Configuring the `.env` file
 
