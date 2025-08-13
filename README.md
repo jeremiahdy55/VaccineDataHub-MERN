@@ -5,7 +5,7 @@ Project Duration: July 2025 (one month)
 ## Table of Contents
 - [Project Overview](#1-project-overview)
 - [Tech Stack](#2-tech-stack)
-- [Installation & Setup](#3-installation-setup--run)
+- [Installation, Setup, & Run](#3-installation-setup--run)
 - [Future Steps](#4-future-steps)
 
 ---
