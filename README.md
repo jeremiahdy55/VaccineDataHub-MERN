@@ -5,7 +5,7 @@ Project Duration: July 2025 (one month)
 ## Table of Contents
 - [Project Overview](#1-project-overview)
 - [Tech Stack](#2-tech-stack)
-- [Installation & Setup](#3-installation--setup)
+- [Installation & Setup](#3-installation-setup--run)
 - [Future Steps](#4-future-steps)
 
 ---
@@ -39,7 +39,7 @@ The React UI techstack utilizes a number of modern UI-related packages to build 
 
 Webpack is used to compile and bundle JS, CSS, and other static assets into optimized files that are ready to be served to the browser. For styling, it uses *css-loader* to process CSS imports within JavaScript modules and *style-loader* to inject those styles dynamically into the HTML document at runtime. The *HTML Webpack Plugin* automates the injection of the generated JS and CSS bundles into the root HTML file. *Babel* serves as the JS transpiler, converting modern JS (ES6+ features) and JSX syntax into backwards-compatible ES5 code for a wider range of browser support.
 
-## 3. Installation & Setup
+## 3. Installation, Setup, & Run
 
 ### AWS and .env file configuration
 
@@ -116,7 +116,7 @@ npm start
 
 through a terminal in their respective directories.
 
-NOTE: The backend runs on port 9000 and the frontend runs on port 9090. Please ensure these ports are available before starting the respective applications.
+NOTE: The backend runs on port `9000` and the frontend runs on port `9090`. Please ensure these ports are available before starting the respective *Node* applications.
 
 ## 4. Future Steps
 
