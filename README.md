@@ -41,7 +41,7 @@ Webpack is used to compile and bundle JS, CSS, and other static assets into opti
 
 ## 3. Installation, Setup, & Run
 
-### AWS and .env file configuration
+### AWS and `.env` file configuration
 
 #### AWS S3 Bucket Setup
 
