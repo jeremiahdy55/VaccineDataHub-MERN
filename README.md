@@ -106,7 +106,7 @@ This project uses the *dotenv* package to inject sensitive information into the 
 
 Additionally, the *MongoDB* URL can be configured to access a remote database rather than the local computer. After configuration, delete all comments and remove the `.txt` file extension. The new file should be named `.env` and will contain sensitive data.
 
-### Frontend and Backend Application Setup (/node_modules)
+### Frontend and Backend Application Setup (`/node_modules`)
 
 Simply open a local terminal and navigate to the `/expressAPI` and `/reactUI` subdirectories, respectively. In each, run:
 
